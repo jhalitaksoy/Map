@@ -46,6 +46,7 @@ namespace Map
         public void ToCenter()
         {
             MapFrame.Start = new Coor(-MapFrame.Size.Width / 2, -MapFrame.Size.Height / 2);
+
         }
 
         private void Map_MouseMove(object sender, MouseEventArgs e)

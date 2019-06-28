@@ -15,6 +15,7 @@ namespace Map
         void Zoom(ICoor coor, double scale);
 
         void Move(ISize size);
-    }
 
+        void Goto(ICoor coor);
+    }
 }

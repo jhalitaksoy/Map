@@ -1,4 +1,5 @@
-﻿using System;
+﻿using netDxf;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -20,19 +21,48 @@ namespace Map
             InitializeComponent();
 
             Map = AddMap();
-            AddLayers(Map);
-            Map.ToCenter();
+            OpenFile();
+            Map.Goto(Map.Layers[0].Geoms[0].Coors[0]);
+            //Map.ToCenter();
             Map.Refresh();
         }
 
-        public void AddLayers(IMap map)
+        public void OpenFile()
         {
-            var layer = new Layer();
-            var line = new MLine();
-            line.Coors.Add(new Coor(0, 0));
-            line.Coors.Add(new Coor(100, 100));
-            layer.Geoms.Add(line);
-            map.Layers.Add(layer);
+            var fileDialog = new OpenFileDialog();
+            if(fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                OpenDxfFile(fileDialog.FileName);
+            }
+        }
+
+        public void OpenDxfFile(string path)
+        {
+            try
+            {
+                var layer = new Layer();
+                var dxfDoc = DxfDocument.Load(path);
+
+                foreach (var poly in dxfDoc.Polylines)
+                {
+                    if(poly.Layer.Name != "KADASTRO")
+                    {
+                        continue;
+                    }
+                    var polygon = new Polygon();
+                    foreach (var vertex in poly.Vertexes)
+                    {
+                        polygon.Coors.Add(new Coor(vertex.Position.X, vertex.Position.Y));
+                    }
+                    layer.Geoms.Add(polygon);
+                }
+                Map.Layers.Add(layer);
+            }
+            catch (Exception)
+            {
+
+            }
+            
         }
 
         public IMap AddMap()

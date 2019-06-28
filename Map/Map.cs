@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SPoint = System.Drawing.Point;
@@ -147,6 +148,12 @@ namespace Map
         {
             MapFrame.Start.X += size.Width * 1/MapFrame.Scale;
             MapFrame.Start.Y += size.Height * 1/MapFrame.Scale;
+        }
+
+        public void Goto(ICoor coor)
+        {
+            MapFrame.Start = coor;
+            Refresh();
         }
     }
 }

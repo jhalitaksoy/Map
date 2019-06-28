@@ -5,7 +5,7 @@ using SPoint = System.Drawing.Point;
 
 namespace Map
 {
-    public class Polygon
+    public class Polygon : IGeom
     {
         public GeoType Type {
             get

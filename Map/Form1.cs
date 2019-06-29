@@ -21,10 +21,11 @@ namespace Map
             InitializeComponent();
 
             Map = AddMap();
-            OpenDxfFile("E:\\Arazi_Toplulastirma\\DataSet\\çaltı_kadastro_son.dxf");
+            //OpenDxfFile("E:\\Arazi_Toplulastirma\\DataSet\\çaltı_kadastro_son.dxf");
+            OpenFile();
             Map.Goto(Map.Layers[0].Geoms[0].Coors[0]);
             //Map.ToCenter();
-            //Map.Refresh();
+            Map.Refresh();
 
         }
 
@@ -69,12 +70,9 @@ namespace Map
         public IMap AddMap()
         {
             Map map = new Map(Size - new Size(40, 60));
-            
             map.Size = new System.Drawing.Size(768, 443);
-            //map.BackColor = Color.White;
             Size = new Size(800, 500);
             map.Location = new SPoint(10, 10);
-            //map.Size = Size - new Size(40, 60);
             map.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
             Controls.Add(map);
             return map;

@@ -24,7 +24,8 @@ namespace Map
             OpenDxfFile("E:\\Arazi_Toplulastirma\\DataSet\\çaltı_kadastro_son.dxf");
             Map.Goto(Map.Layers[0].Geoms[0].Coors[0]);
             //Map.ToCenter();
-            Map.Refresh();
+            //Map.Refresh();
+
         }
 
         public void OpenFile()
@@ -68,7 +69,9 @@ namespace Map
         public IMap AddMap()
         {
             Map map = new Map(Size - new Size(40, 60));
-            map.BackColor = Color.White;
+            
+            map.Size = new System.Drawing.Size(768, 443);
+            //map.BackColor = Color.White;
             Size = new Size(800, 500);
             map.Location = new SPoint(10, 10);
             //map.Size = Size - new Size(40, 60);

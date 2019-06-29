@@ -72,8 +72,17 @@ namespace Map
 
         private void Map_MouseWheel(object sender, MouseEventArgs e)
         {
-            double deltaScale = SensivityWheel * e.Delta / 100;
-            Zoom(MapFrame.Center, MapFrame.Scale + deltaScale);
+            double deltaScale = MapFrame.Scale;
+            if (e.Delta > 0)
+            {
+                deltaScale += 0.01;
+            }
+            else
+            {
+                deltaScale -= 0.01;
+            }
+
+            Zoom(MapFrame.Center, deltaScale);
             Refresh();
         }
 
@@ -177,7 +186,7 @@ namespace Map
 
         public void Goto(ICoor coor)
         {
-            MapFrame.Start = coor;
+            MapFrame.Start = new Coor(coor.X, coor.Y);
             Refresh();
         }
     }

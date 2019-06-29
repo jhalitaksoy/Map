@@ -79,19 +79,40 @@ namespace Map
 
         private void Map_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            var t1 = DateTime.Now;
 
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            double calcTime = 0;
+            double paintTime = 0;
             foreach (var layer in Layers)
             {
                 foreach (var geom in layer.Geoms)
                 {
-                    geom.Painter.Paint(e, GetPoints(geom));
+                    var tt1 = DateTime.Now;
+                    var list = GetPoints(geom);
+                    var tt2 = DateTime.Now;
+                    geom.Painter.Paint(e, list);
+                    var tt3 = DateTime.Now;
+
+                    calcTime += (tt2 - tt1).Ticks;
+                    paintTime += (tt3 - tt2).Ticks;
                 }
             }
 
-            DrawStr(e, MapFrame.Scale.ToString(), 5, 5);
-            DrawStr(e, $"{((int)MapFrame.Size.Width).ToString() } , {((int)MapFrame.Size.Height).ToString() }"  , 5, 20);
-            DrawStr(e, $"{((int)MapFrame.Start.X).ToString() } , {((int)MapFrame.Start.Y).ToString() }"  , 5, 35);
+            //DrawStr(e, MapFrame.Scale.ToString(), 5, 5);
+            //DrawStr(e, $"{((int)MapFrame.Size.Width).ToString() } , {((int)MapFrame.Size.Height).ToString() }"  , 5, 20);
+            //DrawStr(e, $"{((int)MapFrame.Start.X).ToString() } , {((int)MapFrame.Start.Y).ToString() }"  , 5, 35);
+
+            e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(30, 100, 100, 100)), new Rectangle(0, 0, 500, 35));
+
+            var t2 = DateTime.Now;
+
+            var delta = t2 - t1;
+            int perPaint = (int) ((100 * paintTime) / delta.Ticks);
+            int perCalc = (int)((100 * calcTime) / delta.Ticks);
+
+            DrawStr(e, $" Paint : {(int)paintTime} ({perPaint}%) , Calc : {(int)calcTime} ({perCalc}%) , Total : {(int)delta.Ticks}", 5, 5);
+            DrawStr(e, "FPS : " + ((int)(1000 / delta.TotalMilliseconds)).ToString(), 5, 20);
         }
 
         private void DrawStr(PaintEventArgs e, String str, int x, int y)
@@ -136,6 +157,10 @@ namespace Map
 
         public void Zoom(ICoor coor, double scale)
         {
+            if(scale < 0)
+            {
+                scale = 0.05;
+            }
             ISize oldSize = (ISize) MapFrame.Size.Clone();
             MapFrame.Scale = scale;
             var Width  = (MapFrame.Size.Width  - oldSize.Width ) / 2;

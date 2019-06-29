@@ -21,7 +21,7 @@ namespace Map
             InitializeComponent();
 
             Map = AddMap();
-            OpenFile();
+            OpenDxfFile("E:\\Arazi_Toplulastirma\\DataSet\\çaltı_kadastro_son.dxf");
             Map.Goto(Map.Layers[0].Geoms[0].Coors[0]);
             //Map.ToCenter();
             Map.Refresh();
